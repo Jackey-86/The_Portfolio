@@ -21,8 +21,8 @@ const Dashboard: React.FC<DashboardProps> = ({ onStartProject }) => {
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
       .then(({ data }) => { if (data) setRequests(data); })
-      .catch(console.warn)
-      .finally(() => setLoading(false));
+      .catch(() => {})
+      .then(() => setLoading(false));
   }, [user]);
 
   return (

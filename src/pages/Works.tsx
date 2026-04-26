@@ -204,7 +204,6 @@ const Carousel: React.FC<{ images: string[]; name: string; onImageClick: (i: num
 interface WorksProps { onStartProject: () => void; }
 
 const Works: React.FC<WorksProps> = ({ onStartProject }) => {
-  const navigate = useNavigate();
   const [projects, setProjects] = useState<PortfolioProject[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
@@ -214,8 +213,11 @@ const Works: React.FC<WorksProps> = ({ onStartProject }) => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
     supabase.from('portfolio_projects').select('*').order('sort_order')
-      .then(({ data }) => { if (data) setProjects(data as PortfolioProject[]); })
-      .finally(() => setLoading(false));
+        .then(({ data }) => {
+          if (data) setProjects(data as PortfolioProject[]);
+          setLoading(false);
+        })
+        .catch(() => setLoading(false));
   }, []);
 
   const categories = ['all', ...Array.from(new Set(projects.map(p => p.category).filter(Boolean)))];

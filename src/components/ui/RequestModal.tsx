@@ -51,8 +51,7 @@ const RequestModal: React.FC<RequestModalProps> = ({ open, onClose }) => {
       .select('*')
       .eq('is_active', true)
       .order('sort_order')
-      .then(({ data }) => { if (data) setServices(data); })
-      .catch(() => {});
+      .then(({ data }) => { if (data) setServices(data); }, () => {});
   }, [open, user]);
 
   const selectedService = services.find(s => s.id === form.service_id);

@@ -12,7 +12,7 @@ const Navbar: React.FC<NavbarProps> = ({ onStartProject }) => {
   const { user, isAdmin, signOut } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [, setMenuOpen] = useState(false);
 
   const links = [
     { to: '/', label: 'home' },
