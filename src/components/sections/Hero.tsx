@@ -25,7 +25,7 @@ const Hero: React.FC<HeroProps> = ({ onStartProject }) => {
       </div>
 
       {/* Hero */}
-      <div style={{ backgroundImage: "url('/Hero_Bg.jpeg')", backgroundSize: 'cover', backgroundPosition: 'no-repeat',padding: '7rem 3rem 5rem', maxWidth: 1200, margin: '0 auto', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ backgroundImage: "url('/Hero_bg.jpeg')", backgroundSize: 'cover', backgroundPosition: 'no-repeat',padding: '7rem 3rem 5rem', maxWidth: 1200, margin: '0 auto', position: 'relative', overflow: 'hidden' }}>
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(0, 0, 0, 0.99), rgba(0, 0, 0, 0.41), transparent)', zIndex: 0, }}/>
         {/* Glow accent 
         <div style={{ position: 'absolute', top: '4rem', right: '-5rem', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,255,136,0.06) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 1 }} />*/}
