@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
-import { ServiceCategory, PortfolioProject} from '../../types';
+import { ServiceCategory, PortfolioProject } from '../../types';
 import { useNavigate } from 'react-router-dom';
-//import { PortfolioProject } from '../../types';
-
 
 interface WhatIDoProps {
   onStartProject: () => void;
@@ -18,7 +16,6 @@ const FALLBACK_SERVICES: Partial<ServiceCategory>[] = [
   { id: '6', name: 'Retainer Support', description: 'Ongoing updates, monitoring & feature development.', price_label: 'from GHC700/mo', timeline: 'ongoing' },
 ];
 
-
 const WorksGrid: React.FC = () => {
   const navigate = useNavigate();
   const [projects, setProjects] = useState<PortfolioProject[]>([]);
@@ -26,7 +23,7 @@ const WorksGrid: React.FC = () => {
   const mono = "'JetBrains Mono',monospace";
 
   useEffect(() => {
-    supabase.from('portfolio_projects').select('*').order('sort_order').limit(4)
+    supabase.from('portfolio_projects').select('*').order('sort_order').limit(3)
       .then(({ data }) => { if (data) setProjects(data as PortfolioProject[]); });
   }, []);
 
@@ -36,9 +33,7 @@ const WorksGrid: React.FC = () => {
       setIdx(prev => {
         const next = { ...prev };
         projects.forEach(p => {
-          if (p.images?.length > 1) {
-            next[p.id] = ((prev[p.id] ?? 0) + 1) % p.images.length;
-          }
+          if (p.images?.length > 1) next[p.id] = ((prev[p.id] ?? 0) + 1) % p.images.length;
         });
         return next;
       });
@@ -49,15 +44,12 @@ const WorksGrid: React.FC = () => {
   if (!projects.length) return null;
 
   return (
-    <div style={{ marginTop: '2.5rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.25rem' }}>
+    <div style={{ marginTop: '2.5rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '1.25rem' }}>
       {projects.map((p, i) => (
-        <div key={p.id}
-          onClick={() => navigate('/works')}
+        <div key={p.id} onClick={() => navigate('/works')}
           style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 6, overflow: 'hidden', cursor: 'pointer', transition: 'transform 0.2s, border-color 0.2s' }}
           onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-3px)'; (e.currentTarget as HTMLDivElement).style.borderColor = 'var(--border2)'; }}
           onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLDivElement).style.borderColor = 'var(--border)'; }}>
-
-          {/* Image */}
           <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', overflow: 'hidden', background: 'var(--bg3)' }}>
             {p.images?.length > 0 ? (
               <>
@@ -76,8 +68,6 @@ const WorksGrid: React.FC = () => {
               <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: mono, fontSize: '0.62rem', color: 'var(--fg3)' }}>// no_images</div>
             )}
           </div>
-
-          {/* Info */}
           <div style={{ padding: '1rem 1.1rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
               <span style={{ fontFamily: mono, fontSize: '0.6rem', color: 'var(--fg3)' }}>{String(i + 1).padStart(2, '0')}_</span>
@@ -103,15 +93,12 @@ const WhatIDo: React.FC<WhatIDoProps> = ({ onStartProject }) => {
   const navigate = useNavigate();
   const [services, setServices] = useState<ServiceCategory[]>([]);
   const [loading, setLoading] = useState(true);
+  const mono = "'JetBrains Mono',monospace";
 
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const { data } = await supabase
-          .from('service_categories')
-          .select('*')
-          .eq('is_active', true)
-          .order('sort_order');
+        const { data } = await supabase.from('service_categories').select('*').eq('is_active', true).order('sort_order');
         if (data) setServices(data);
       } catch (err) {
         console.warn('[WhatIDo] Could not fetch services:', err);
@@ -125,82 +112,72 @@ const WhatIDo: React.FC<WhatIDoProps> = ({ onStartProject }) => {
   const displayServices = services.length > 0 ? services : (FALLBACK_SERVICES as ServiceCategory[]);
 
   return (
-    <section style={{ padding: '5rem 3rem', maxWidth: 1000, margin: '0 auto' }}>
-      <div className="section-label">services_available</div>
-      <div className="section-title">What I Do</div>
+    <>
+      <style>{`
+        .whatido-section { padding: 4rem 3rem; max-width: 1000px; margin: 0 auto; }
+        .whatido-grid { display: grid; grid-template-columns: 1fr 320px; gap: 1.5rem; align-items: stretch; }
+        .whatido-cta { margin-top: 2.5rem; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+        @media (max-width: 768px) {
+          .whatido-section { padding: 3rem 1.25rem; }
+          .whatido-grid { grid-template-columns: 1fr; }
+          .whatido-cta { flex-direction: column; align-items: stretch; }
+          .whatido-cta button { width: 100%; justify-content: center; }
+        }
+      `}</style>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: '1.5rem', alignItems: 'stretch' }}>
+      <section className="whatido-section">
+        <div className="section-label">services_available</div>
+        <div className="section-title">What I Do</div>
 
-        {/* LEFT — Intro video / placeholder */}
-        <div
-          style={{
-            position: 'relative',
-            width: '100%',
-            height: 'calc(100% - 36px)',
-            minHeight: 380,
-            background: '#000',
-          }}
-        >
-          <video
-            src="/intro.mp4"
-            controls
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-            }}
-          />
-        </div>
-
-        {/* RIGHT — Services & Pricing panel */}
-        <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 6, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-          <div style={{ padding: '1rem 1.25rem', borderBottom: '1px solid var(--border)', background: 'var(--bg3)' }}>
-            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: '0.6rem', color: 'var(--green)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '0.2rem' }}>// rate_card.json</div>
-            <div style={{ fontSize: '0.9rem', fontWeight: 700 }}>Services & Pricing</div>
+        <div className="whatido-grid">
+          {/* Video */}
+          <div style={{ position: 'relative', width: '100%', minHeight: 280, background: '#000', borderRadius: 6, overflow: 'hidden' }}>
+            <video src="/intro.mp4" controls style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
           </div>
 
-          <div style={{ flex: 1, overflowY: 'auto', padding: '0.5rem 0' }}>
-            {loading ? (
-              <div style={{ padding: '2rem 1.25rem', fontFamily: "'JetBrains Mono',monospace", fontSize: '0.7rem', color: 'var(--fg3)' }}>loading services...</div>
-            ) : (
-              displayServices.map((svc, i) => (
-                <div key={svc.id || i}
-                  style={{ padding: '0.85rem 1.25rem', borderBottom: i < displayServices.length - 1 ? '1px solid var(--border)' : 'none', transition: 'background 0.2s', cursor: 'pointer' }}
-                  onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.background = 'var(--bg3)'}
-                  onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.background = 'transparent'}
-                  onClick={onStartProject}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.5rem', marginBottom: '0.2rem' }}>
-                    <div style={{ fontSize: '0.82rem', fontWeight: 700, lineHeight: 1.3 }}>{svc.name}</div>
-                    <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: '0.68rem', color: 'var(--green)', fontWeight: 700, whiteSpace: 'nowrap', flexShrink: 0 }}>{svc.price_label}</div>
+          {/* Services panel */}
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 6, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ padding: '1rem 1.25rem', borderBottom: '1px solid var(--border)', background: 'var(--bg3)' }}>
+              <div style={{ fontFamily: mono, fontSize: '0.6rem', color: 'var(--green)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '0.2rem' }}>// rate_card.json</div>
+              <div style={{ fontSize: '0.9rem', fontWeight: 700 }}>Services & Pricing</div>
+            </div>
+            <div style={{ flex: 1, overflowY: 'auto', padding: '0.5rem 0' }}>
+              {loading ? (
+                <div style={{ padding: '2rem 1.25rem', fontFamily: mono, fontSize: '0.7rem', color: 'var(--fg3)' }}>loading services...</div>
+              ) : (
+                displayServices.map((svc, i) => (
+                  <div key={svc.id || i}
+                    style={{ padding: '0.85rem 1.25rem', borderBottom: i < displayServices.length - 1 ? '1px solid var(--border)' : 'none', transition: 'background 0.2s', cursor: 'pointer' }}
+                    onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.background = 'var(--bg3)'}
+                    onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.background = 'transparent'}
+                    onClick={onStartProject}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.5rem', marginBottom: '0.2rem' }}>
+                      <div style={{ fontSize: '0.82rem', fontWeight: 700, lineHeight: 1.3 }}>{svc.name}</div>
+                      <div style={{ fontFamily: mono, fontSize: '0.68rem', color: 'var(--green)', fontWeight: 700, whiteSpace: 'nowrap', flexShrink: 0 }}>{svc.price_label}</div>
+                    </div>
+                    <div style={{ fontFamily: mono, fontSize: '0.62rem', color: 'var(--fg3)', lineHeight: 1.6, marginBottom: '0.3rem' }}>{svc.description}</div>
+                    <div style={{ fontFamily: mono, fontSize: '0.6rem', color: 'var(--cyan)' }}>⏱ {svc.timeline}</div>
                   </div>
-                  <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: '0.62rem', color: 'var(--fg3)', lineHeight: 1.6, marginBottom: '0.3rem' }}>{svc.description}</div>
-                  <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: '0.6rem', color: 'var(--cyan)' }}>⏱ {svc.timeline}</div>
-                </div>
-              ))
-            )}
-          </div>
-
-          <div style={{ padding: '1rem 1.25rem', borderTop: '1px solid var(--border)', background: 'var(--bg3)' }}>
-            <button className="btn-primary" onClick={onStartProject} style={{ width: '100%', justifyContent: 'center', padding: '0.7rem', fontSize: '0.72rem' }}>
-              request_quote() →
-            </button>
+                ))
+              )}
+            </div>
+            <div style={{ padding: '1rem 1.25rem', borderTop: '1px solid var(--border)', background: 'var(--bg3)' }}>
+              <button className="btn-primary" onClick={onStartProject} style={{ width: '100%', justifyContent: 'center', padding: '0.7rem', fontSize: '0.72rem' }}>
+                request_quote() →
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Live works grid */}
-      <WorksGrid />
+        {/* Live works grid */}
+        <WorksGrid />
 
-      <div style={{ marginTop: '2.5rem', textAlign: 'center', display: 'flex', justifyContent: 'center', gap: '1rem' }}>
-        <button className="btn-secondary" onClick={() => navigate('/works')}>see_all_projects →</button>
-        <button className="btn-primary" onClick={onStartProject}>./start_project</button>
-      </div>
-
-      {/* <div style={{ marginTop: '2.5rem', textAlign: 'center' }}>
-        <button className="btn-primary" onClick={onStartProject}>./start_project</button>
-      </div> */}
-    </section>
+        <div className="whatido-cta">
+          <button className="btn-secondary" onClick={() => navigate('/works')}>see_all_projects →</button>
+          <button className="btn-primary" onClick={onStartProject}>./start_project</button>
+        </div>
+      </section>
+    </>
   );
 };
 
