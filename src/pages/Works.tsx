@@ -213,11 +213,7 @@ const Works: React.FC<WorksProps> = ({ onStartProject }) => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
     supabase.from('portfolio_projects').select('*').order('sort_order')
-        .then(({ data }) => {
-          if (data) setProjects(data as PortfolioProject[]);
-          setLoading(false);
-        })
-        .catch(() => setLoading(false));
+      .then(({ data }) => { if (data) setProjects(data as PortfolioProject[]); setLoading(false); }, () => setLoading(false));
   }, []);
 
   const categories = ['all', ...Array.from(new Set(projects.map(p => p.category).filter(Boolean)))];

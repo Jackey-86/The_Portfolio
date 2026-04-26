@@ -46,9 +46,7 @@ const RequestsTab: React.FC = () => {
 
   useEffect(() => {
     supabase.from('client_requests').select('*').order('created_at', { ascending: false })
-      .then(({ data }) => { if (data) setRequests(data as ClientRequest[]); })
-      .then(() => setLoading(false))
-      .catch(() => setLoading(false));
+      .then(({ data }) => { if (data) setRequests(data as ClientRequest[]); setLoading(false); }, () => setLoading(false));
 
     const channel = supabase.channel('admin-requests')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'client_requests' }, () => {
