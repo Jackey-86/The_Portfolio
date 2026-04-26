@@ -12,7 +12,7 @@ const Hero: React.FC<HeroProps> = ({ onStartProject }) => {
     <>
       {/* Profile row */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', padding: '2.5rem 3rem', background: 'var(--bg2)', borderBottom: '1px solid var(--border)' }}>
-        <img src="/public/Placeholder.jpeg" alt="Enoch Jackson"style={{width: 72, height: 72, borderRadius: 4, border: '2px solid var(--green)', objectFit: 'cover', flexShrink: 0,}}/>
+        <img src="/Placeholder.jpeg" alt="Enoch Jackson"style={{width: 72, height: 72, borderRadius: 4, border: '2px solid var(--green)', objectFit: 'cover', flexShrink: 0,}}/>
         <div>
           <h2 style={{ fontSize: '1.2rem', fontWeight: 700, letterSpacing: '-0.01em' }}>Enoch K. Jackson</h2>
           <p style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: '0.72rem', color: 'var(--green)', marginTop: '0.25rem' }}>// full-stack designer + developer @ The Jackson</p>
@@ -25,7 +25,7 @@ const Hero: React.FC<HeroProps> = ({ onStartProject }) => {
       </div>
 
       {/* Hero */}
-      <div style={{ backgroundImage: "url('/public/Hero_Bg.jpeg')", backgroundSize: 'cover', backgroundPosition: 'no-repeat',padding: '7rem 3rem 5rem', maxWidth: 1200, margin: '0 auto', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ backgroundImage: "url('/Hero_Bg.jpeg')", backgroundSize: 'cover', backgroundPosition: 'no-repeat',padding: '7rem 3rem 5rem', maxWidth: 1200, margin: '0 auto', position: 'relative', overflow: 'hidden' }}>
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(0, 0, 0, 0.99), rgba(0, 0, 0, 0.41), transparent)', zIndex: 0, }}/>
         {/* Glow accent 
         <div style={{ position: 'absolute', top: '4rem', right: '-5rem', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,255,136,0.06) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 1 }} />*/}
