@@ -141,7 +141,7 @@ const Hero: React.FC<HeroProps> = ({ onStartProject }) => {
 
       {/* Profile row */}
       <div className="hero-profile">
-        <img src="/Placeholder.jpeg" alt="Enoch Jackson"
+        <img src="/Main Favicon.jpeg" alt="Enoch Jackson"
           style={{ width: 60, height: 60, borderRadius: 4, border: '2px solid var(--green)', objectFit: 'cover', flexShrink: 0 }} />
         <div>
           <h2 style={{ fontSize: '1.05rem', fontWeight: 700, letterSpacing: '-0.01em' }}>Enoch K. Jackson</h2>
